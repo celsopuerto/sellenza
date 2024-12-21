@@ -3,7 +3,6 @@
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { Button } from '@/components/ui/button';
 import products from '@/lib/data';
 
 const SearchPage = () => {
@@ -12,6 +11,8 @@ const SearchPage = () => {
     const [filteredProducts, setFilteredProducts] = useState([]);
     const [categories, setCategories] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState('');
+
+    console.log(query);
 
     useEffect(() => {
         // Extract unique categories from the product data
@@ -22,28 +23,38 @@ const SearchPage = () => {
         const results = products.filter((product) =>
             (product.name.toLowerCase().includes(query.toLowerCase()) ||
                 product.category.toLowerCase().includes(query.toLowerCase())) &&
-            (!selectedCategory || product.category === selectedCategory)
+            (selectedCategory === '' || product.category === selectedCategory)
         );
 
         setFilteredProducts(results);
     }, [query, selectedCategory]);
 
+    const handleAllClick = () => {
+        // When "All" is clicked, reset both query and selectedCategory
+        setSelectedCategory('');
+    };
+
     return (
         <div className="container mx-auto flex">
             {/* Categories Sidebar */}
-            <aside className="w-40 bg-gray-50 dark:bg-zinc-900 rounded-lg">
-                <h2 className="text-[12px] text-gray-400 dark:text-400 mb-2">Collections</h2>
+            <aside className="w-40 bg-gray-50 dark:bg-zinc-900 rounded-lg p-4">
+                <h2 className="text-[12px] text-gray-400 dark:text-400 mb-4">Collections</h2>
                 <ul>
                     <li>
-                        <Link className="custom-underline" href="/search">All</Link>
+                        <Link
+                            href="/search"
+                            className={`custom-underline text-sm ${selectedCategory === '' ? 'text-blue-600 dark:text-blue-400' : ''}`}
+                            onClick={handleAllClick}
+                        >
+                            All
+                        </Link>
                     </li>
                     {categories.map((category) => (
                         <li key={category} className="capitalize">
                             <Link
                                 href={`/search?q=${encodeURIComponent(category)}`}
-                                className={`custom-underline text-sm ${
-                                    selectedCategory === category ? 'text-blue-600 dark:text-blue-400' : ''
-                                }`}
+                                className={`custom-underline text-sm ${selectedCategory === category ? 'text-blue-600 dark:text-blue-400' : ''}`}
+                                onClick={() => setSelectedCategory(category)}
                             >
                                 {category}
                             </Link>
@@ -53,11 +64,13 @@ const SearchPage = () => {
             </aside>
 
             {/* Products Grid */}
-            <div className="w-5/6">
+            <div className="w-5/6 pl-8">
                 <h1 className="text-2xl font-semibold mb-4">
                     {selectedCategory
                         ? `Products in "${selectedCategory}"`
-                        : `Search Results for "${query}"`}
+                        : query
+                        ? `Search Results for "${query}"`
+                        : ''}
                 </h1>
                 {filteredProducts.length > 0 ? (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
