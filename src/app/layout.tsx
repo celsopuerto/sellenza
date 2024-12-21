@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "react-hot-toast";
 import { useAuth } from "@/app/hooks/useAuth";
+import { useRouter, usePathname } from 'next/navigation';
 import Navbar from "@/components/Navbar";
 import React from "react";
 
@@ -12,7 +13,16 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { loading } = useAuth();
+  const { user, loading } = useAuth();
+  const router = useRouter();
+  const pathname = usePathname();
+  const isLoginOrRegister = pathname === '/login' || pathname === '/register'
+
+  if(user) {
+    if (isLoginOrRegister) {
+      router.push('/')
+    }
+  }
 
   if (loading) {
     return (

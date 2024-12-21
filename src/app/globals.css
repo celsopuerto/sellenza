@@ -91,3 +91,17 @@ body {
 .animate-scroll {
   animation: scroll 100s linear infinite;
 }
+
+.custom-underline {
+  position: relative;
+}
+
+.custom-underline:hover::after {
+  content: '';
+  position: absolute;
+  bottom: -2px; /* Controls the distance of the underline from the text */
+  left: 0;
+  right: 0;
+  height: 2px; /* Controls the thickness of the underline */
+  background-color: currentColor; /* Uses the link color */
+}

@@ -2,7 +2,6 @@
 
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { useAuth } from '@/app/hooks/useAuth'
 import { LoginForm } from "@/components/login-form"
 import { auth } from '@/firebase/config';
 import { signInWithEmailAndPassword } from 'firebase/auth';
@@ -11,13 +10,6 @@ import toast from 'react-hot-toast';
 export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-
-  const { user } = useAuth();
-
-  if(user) {
-    toast.error('You are already authenticated');
-    router.push('/');
-  }
 
   const handleLogin = async (email: string, password: string) => {
     setLoading(true)
