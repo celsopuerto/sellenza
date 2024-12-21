@@ -21,7 +21,7 @@ const Navbar = () => {
       router.push('/login');
     } catch (error) {
       toast.error('Logout failed!');
-      console.error("Error: ", error);
+      console.error("Error: d", error);
     }
   }
 
