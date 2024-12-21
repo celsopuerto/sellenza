@@ -48,7 +48,7 @@ const Navbar = () => {
             <Link href="/search">All</Link>
           </Button>
           <Button variant="link">
-            <Link href="/search/shirt">Shirt</Link>
+            <Link href="/search/shirts">Shirt</Link>
           </Button>
           <Button variant="link">
             <Link href="/search/shoes">Shoes</Link>
@@ -80,7 +80,7 @@ const Navbar = () => {
             <div className="flex items-center space-x-4">
               <ModeToggle />
               <small className="text-sm font-medium text-zinc-800 dark:text-zinc-200">
-                {user?.email}
+                {loading ? 'Loading...' : user?.email}
               </small>
               <Button variant="default" onClick={handleLogout} aria-label="Logout">
                 Logout
