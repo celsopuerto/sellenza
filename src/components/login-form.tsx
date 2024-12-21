@@ -87,7 +87,7 @@ export function LoginForm({
                   <p>Please wait</p> {/* Loading text */}
                 </div>
               ) : (
-                'Register'
+                'Login'
               )}
             </Button>
 

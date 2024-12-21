@@ -5,10 +5,25 @@ import Image from 'next/image';
 import { AiOutlineSearch } from 'react-icons/ai'; // Import the search icon
 import ModeToggle from './ThemeToggle';
 import { Button } from './ui/button';
-// import { useState } from 'react';
+import { auth } from '@/firebase/config';
+import toast from 'react-hot-toast';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/app/hooks/useAuth';
 
 const Navbar = () => {
-  // const [user, setUser] = useState({});
+  const router = useRouter();
+  const { user, loading } = useAuth();
+
+  const handleLogout = async () => {
+    try {
+      await auth.signOut();
+      toast.success('Logout successful!');
+      router.push('/login');
+    } catch (error) {
+      toast.error('Logout failed!');
+      console.error("Error: ", error);
+    }
+  }
 
   return (
     <nav className="bg-zinc-50 dark:bg-zinc-900 p-4 border-zinc-300 dark:border-zinc-800">
@@ -60,15 +75,32 @@ const Navbar = () => {
         </div>
 
         {/* Authentication */}
-        <div className="flex items-center space-x-3">
-          <ModeToggle />
-          
-          <Button variant="transparent" asChild>
-            <Link className="text-sm" href="/login">Login</Link>
-          </Button>
-          <Button variant="default" asChild>
-            <Link className="text-sm" href="/register">Register</Link>
-          </Button>
+        <div className="flex items-center space-x-4">
+          {user ? (
+            <div className="flex items-center space-x-4">
+              <ModeToggle />
+              <small className="text-sm font-medium text-zinc-800 dark:text-zinc-200">
+                {user?.email}
+              </small>
+              <Button variant="default" onClick={handleLogout} aria-label="Logout">
+                Logout
+              </Button>
+            </div>
+          ) : (
+            <div className="flex items-center space-x-4">
+              <ModeToggle />
+              <Button variant="transparent" asChild>
+                <Link className="text-sm" href="/login" aria-label="Login">
+                  Login
+                </Link>
+              </Button>
+              <Button variant="default" asChild>
+                <Link className="text-sm" href="/register" aria-label="Register">
+                  Register
+                </Link>
+              </Button>
+            </div>
+          )}
         </div>
       </div>
     </nav>
