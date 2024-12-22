@@ -1,5 +1,5 @@
 import Image from 'next/image';
-
+// Attendance
 export default function Home() {
   return (
     <div className="flex flex-col items-center h-[40rem] space-y-6">
